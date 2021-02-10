@@ -81,4 +81,17 @@ describe('Login Controller', () => {
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
   })
+
+  test('Should call EmailValidator with a correct email', () => {
+    const { login, emailValidatorStub } = makeLogin()
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+    const request = {
+      body: {
+        email: 'anything@email.com',
+        password: 'password'
+      }
+    }
+    login.handle(request)
+    expect(isValidSpy).toBeCalledWith('anything@email.com')
+  })
 })
