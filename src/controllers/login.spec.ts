@@ -61,18 +61,14 @@ describe('Login Controller', () => {
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
   })
 
-  test('Should return 500 if EmailValidator throws an Exception', () => {
-    class EmailValidatorStub implements EmailValidator {
-      isValid (email: string): boolean {
-        throw new Error()
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub()
-    const login = new LoginController(emailValidatorStub)
-
+  test('Should return 500 if EmailValidator throws an error', () => {
+    const { login, emailValidatorStub } = makeLogin()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
     const request = {
       body: {
-        email: 'any@email.com',
+        email: 'invalid@email.com',
         password: 'password'
       }
     }
