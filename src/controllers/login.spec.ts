@@ -3,6 +3,7 @@ import { MissingParamError } from '../errors/missing-param-error'
 import { badRequest } from '../helpers/http-helper'
 import { EmailValidator } from '../protocols/email-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
+import { ServerError } from '../errors/server-error'
 
 interface factoryTypes {
   login: LoginController
@@ -58,5 +59,26 @@ describe('Login Controller', () => {
     }
     const response = login.handle(request)
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
+  })
+
+  test('Should return 500 if EmailValidator throws an Exception', () => {
+    class EmailValidatorStub implements EmailValidator {
+      isValid (email: string): boolean {
+        throw new Error()
+      }
+    }
+    const emailValidatorStub = new EmailValidatorStub()
+    const login = new LoginController(emailValidatorStub)
+
+    const request = {
+      body: {
+        email: 'any@email.com',
+        password: 'password'
+      }
+    }
+
+    const response = login.handle(request)
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toEqual(new ServerError())
   })
 })
