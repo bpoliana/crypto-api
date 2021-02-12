@@ -20,7 +20,7 @@ export class LoginController {
       if (!httpRequest.body.password) {
         return badRequest(new MissingParamError('senha'))
       }
-      const isValid = this.emailValidator.isValid(httpRequest.body.email)
+      const isValid = this.emailValidator.isValid(httpRequest.body.email, httpRequest.body.password)
       if (!isValid) {
         return badRequest(new InvalidParamError('email'))
       }
