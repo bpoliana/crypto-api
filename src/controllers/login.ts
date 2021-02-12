@@ -13,14 +13,15 @@ export class LoginController {
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
+    const { email, password } = httpRequest.body
     try {
-      if (!httpRequest.body.email) {
+      if (!email) {
         return badRequest(new MissingParamError('email'))
       }
-      if (!httpRequest.body.password) {
+      if (!password) {
         return badRequest(new MissingParamError('senha'))
       }
-      const isValid = this.loginValidator.isValid(httpRequest.body.email, httpRequest.body.password)
+      const isValid = this.loginValidator.isValid(email, password)
       if (!isValid) {
         return badRequest(new InvalidParamError('email'))
       }
