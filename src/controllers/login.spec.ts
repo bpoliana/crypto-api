@@ -12,7 +12,7 @@ interface factoryTypes {
 
 const makeLogin = (): factoryTypes => {
   class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): boolean {
+    isValid (email: string, password: string): boolean {
       return true
     }
   }
@@ -88,6 +88,6 @@ describe('Login Controller', () => {
       }
     }
     login.handle(request)
-    expect(isValidSpy).toBeCalledWith('anything@email.com')
+    expect(isValidSpy).toBeCalledWith('anything@email.com', 'password')
   })
 })
