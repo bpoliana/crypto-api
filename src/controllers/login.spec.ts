@@ -1,27 +1,27 @@
 import { LoginController } from './login'
 import { MissingParamError } from '../errors/missing-param-error'
 import { badRequest } from '../helpers/http-helper'
-import { EmailValidator } from '../protocols/email-validator'
+import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { ServerError } from '../errors/server-error'
 
 interface factoryTypes {
   login: LoginController
-  emailValidatorStub: EmailValidator
+  loginValidatorStub: LoginValidator
 }
 
 const makeLogin = (): factoryTypes => {
-  class EmailValidatorStub implements EmailValidator {
+  class LoginValidatorStub implements LoginValidator {
     isValid (email: string, password: string): boolean {
       return true
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub()
-  const login = new LoginController(emailValidatorStub)
+  const loginValidatorStub = new LoginValidatorStub()
+  const login = new LoginController(loginValidatorStub)
   return {
     login,
-    emailValidatorStub
+    loginValidatorStub
   }
 }
 
@@ -49,8 +49,8 @@ describe('Login Controller', () => {
   })
 
   test('Should return 400 if an invalid email is provided', () => {
-    const { login, emailValidatorStub } = makeLogin()
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+    const { login, loginValidatorStub } = makeLogin()
+    jest.spyOn(loginValidatorStub, 'isValid').mockReturnValueOnce(false)
     const request = {
       body: {
         email: 'invalid@email.com',
@@ -61,9 +61,9 @@ describe('Login Controller', () => {
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
   })
 
-  test('Should return 500 if EmailValidator throws an error', () => {
-    const { login, emailValidatorStub } = makeLogin()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+  test('Should return 500 if LoginValidator throws an error', () => {
+    const { login, loginValidatorStub } = makeLogin()
+    jest.spyOn(loginValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
     const request = {
@@ -78,9 +78,9 @@ describe('Login Controller', () => {
     expect(response.body).toEqual(new ServerError())
   })
 
-  test('Should call EmailValidator with a correct email', () => {
-    const { login, emailValidatorStub } = makeLogin()
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+  test('Should call LoginValidator with a correct email', () => {
+    const { login, loginValidatorStub } = makeLogin()
+    const isValidSpy = jest.spyOn(loginValidatorStub, 'isValid')
     const request = {
       body: {
         email: 'anything@email.com',
