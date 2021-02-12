@@ -6,10 +6,10 @@ import { InvalidParamError } from '../errors/invalid-param-error'
 import { ServerError } from '../errors/server-error'
 
 export class LoginController {
-  private readonly emailValidator: LoginValidator
+  private readonly loginValidator: LoginValidator
 
-  constructor (emailValidator: any) {
-    this.emailValidator = emailValidator
+  constructor (loginValidator: any) {
+    this.loginValidator = loginValidator
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
@@ -20,7 +20,7 @@ export class LoginController {
       if (!httpRequest.body.password) {
         return badRequest(new MissingParamError('senha'))
       }
-      const isValid = this.emailValidator.isValid(httpRequest.body.email, httpRequest.body.password)
+      const isValid = this.loginValidator.isValid(httpRequest.body.email, httpRequest.body.password)
       if (!isValid) {
         return badRequest(new InvalidParamError('email'))
       }
