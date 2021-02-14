@@ -67,7 +67,7 @@ describe('Login Controller', () => {
     jest.spyOn(loginValidatorStub, 'isValid').mockReturnValueOnce(false)
     const request = makeRequest()
     const response = await login.handle(request)
-    expect(response).toEqual(badRequest(new InvalidParamError('email')))
+    expect(response).toEqual(badRequest(new InvalidParamError()))
   })
 
   test('Should return 500 if LoginValidator throws an error', async () => {

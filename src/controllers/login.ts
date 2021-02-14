@@ -25,7 +25,7 @@ export class LoginController {
       const { email, password } = httpRequest.body
       const isValid = this.loginValidator.isValid(email, password)
       if (!isValid) {
-        return badRequest(new InvalidParamError('email'))
+        return badRequest(new InvalidParamError())
       }
       const accessToken = await this.authentication.auth(email, password)
       if (!accessToken) {
