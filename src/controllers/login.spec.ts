@@ -4,24 +4,39 @@ import { badRequest } from '../helpers/http-helper'
 import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { ServerError } from '../errors/server-error'
-
+import { Authentication } from '../protocols/authentication'
+import { HttpRequest } from '../protocols/http'
 interface factoryTypes {
   login: LoginController
   loginValidatorStub: LoginValidator
+  authenticationStub: Authentication
 }
 
+const makeRequest = (): HttpRequest => ({
+  body: {
+    email: 'anything@email.com',
+    password: 'password'
+  }
+})
+
 const makeLogin = (): factoryTypes => {
+  class AuthenticationStub implements Authentication {
+    async auth (email: string, password: string): Promise<string> {
+      return await new Promise(resolve => resolve('token'))
+    }
+  }
   class LoginValidatorStub implements LoginValidator {
     isValid (email: string, password: string): boolean {
       return true
     }
   }
-
   const loginValidatorStub = new LoginValidatorStub()
-  const login = new LoginController(loginValidatorStub)
+  const authenticationStub = new AuthenticationStub()
+  const login = new LoginController(loginValidatorStub, authenticationStub)
   return {
     login,
-    loginValidatorStub
+    loginValidatorStub,
+    authenticationStub
   }
 }
 
@@ -45,18 +60,13 @@ describe('Login Controller', () => {
       }
     }
     const response = await login.handle(request)
-    expect(response).toEqual(badRequest(new MissingParamError('senha')))
+    expect(response).toEqual(badRequest(new MissingParamError('password')))
   })
 
   test('Should return 400 if an invalid email is provided', async () => {
     const { login, loginValidatorStub } = makeLogin()
     jest.spyOn(loginValidatorStub, 'isValid').mockReturnValueOnce(false)
-    const request = {
-      body: {
-        email: 'invalid@email.com',
-        password: 'password'
-      }
-    }
+    const request = makeRequest()
     const response = await login.handle(request)
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
   })
@@ -66,12 +76,7 @@ describe('Login Controller', () => {
     jest.spyOn(loginValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
-    const request = {
-      body: {
-        email: 'invalid@email.com',
-        password: 'password'
-      }
-    }
+    const request = makeRequest()
 
     const response = await login.handle(request)
     expect(response.statusCode).toBe(500)
@@ -81,13 +86,16 @@ describe('Login Controller', () => {
   test('Should call LoginValidator with a correct email', async () => {
     const { login, loginValidatorStub } = makeLogin()
     const isValidSpy = jest.spyOn(loginValidatorStub, 'isValid')
-    const request = {
-      body: {
-        email: 'anything@email.com',
-        password: 'password'
-      }
-    }
+    const request = makeRequest()
     await login.handle(request)
     expect(isValidSpy).toBeCalledWith('anything@email.com', 'password')
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { login, authenticationStub } = makeLogin()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const request = makeRequest()
+    await login.handle(request)
+    expect(authSpy).toHaveBeenCalledWith('anything@email.com', 'password')
   })
 })
