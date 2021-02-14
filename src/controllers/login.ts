@@ -4,12 +4,15 @@ import { badRequest, internalServerError } from '../helpers/http-helper'
 import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { ServerError } from '../errors/server-error'
+import { Authentication } from '../protocols/authentication'
 
 export class LoginController {
   private readonly loginValidator: LoginValidator
+  private readonly authentication: Authentication
 
-  constructor (loginValidator: any) {
+  constructor (loginValidator: LoginValidator, authentication: Authentication) {
     this.loginValidator = loginValidator
+    this.authentication = authentication
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -25,6 +28,7 @@ export class LoginController {
       if (!isValid) {
         return badRequest(new InvalidParamError('email'))
       }
+      await this.authentication.auth(email, password)
     } catch (error) {
       return internalServerError(new ServerError())
     }
