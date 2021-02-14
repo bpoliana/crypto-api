@@ -12,7 +12,7 @@ export class LoginController {
     this.loginValidator = loginValidator
   }
 
-  handle (httpRequest: HttpRequest): HttpResponse {
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const { email, password } = httpRequest.body
     try {
       if (!email) {

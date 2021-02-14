@@ -26,29 +26,29 @@ const makeLogin = (): factoryTypes => {
 }
 
 describe('Login Controller', () => {
-  test('Should return 400 if no email is provided', () => {
+  test('Should return 400 if no email is provided', async () => {
     const { login } = makeLogin()
     const request = {
       body: {
         password: 'password'
       }
     }
-    const response = login.handle(request)
+    const response = await login.handle(request)
     expect(response).toEqual(badRequest(new MissingParamError('email')))
   })
 
-  test('Should return 400 if no password is provided', () => {
+  test('Should return 400 if no password is provided', async () => {
     const { login } = makeLogin()
     const request = {
       body: {
         email: 'somebody@email.com'
       }
     }
-    const response = login.handle(request)
+    const response = await login.handle(request)
     expect(response).toEqual(badRequest(new MissingParamError('senha')))
   })
 
-  test('Should return 400 if an invalid email is provided', () => {
+  test('Should return 400 if an invalid email is provided', async () => {
     const { login, loginValidatorStub } = makeLogin()
     jest.spyOn(loginValidatorStub, 'isValid').mockReturnValueOnce(false)
     const request = {
@@ -57,11 +57,11 @@ describe('Login Controller', () => {
         password: 'password'
       }
     }
-    const response = login.handle(request)
+    const response = await login.handle(request)
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
   })
 
-  test('Should return 500 if LoginValidator throws an error', () => {
+  test('Should return 500 if LoginValidator throws an error', async () => {
     const { login, loginValidatorStub } = makeLogin()
     jest.spyOn(loginValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
@@ -73,12 +73,12 @@ describe('Login Controller', () => {
       }
     }
 
-    const response = login.handle(request)
+    const response = await login.handle(request)
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
   })
 
-  test('Should call LoginValidator with a correct email', () => {
+  test('Should call LoginValidator with a correct email', async () => {
     const { login, loginValidatorStub } = makeLogin()
     const isValidSpy = jest.spyOn(loginValidatorStub, 'isValid')
     const request = {
@@ -87,7 +87,7 @@ describe('Login Controller', () => {
         password: 'password'
       }
     }
-    login.handle(request)
+    await login.handle(request)
     expect(isValidSpy).toBeCalledWith('anything@email.com', 'password')
   })
 })
