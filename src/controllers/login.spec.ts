@@ -1,9 +1,8 @@
 import { LoginController } from './login'
 import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest } from '../helpers/http-helper'
+import { badRequest, internalServerError, unauthorized } from '../helpers/http-helper'
 import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
-import { ServerError } from '../errors/server-error'
 import { Authentication } from '../protocols/authentication'
 import { HttpRequest } from '../protocols/http'
 interface factoryTypes {
@@ -22,7 +21,7 @@ const makeRequest = (): HttpRequest => ({
 const makeLogin = (): factoryTypes => {
   class AuthenticationStub implements Authentication {
     async auth (email: string, password: string): Promise<string> {
-      return await new Promise(resolve => resolve('token'))
+      return await new Promise(resolve => resolve('token aqui'))
     }
   }
   class LoginValidatorStub implements LoginValidator {
@@ -79,8 +78,7 @@ describe('Login Controller', () => {
     const request = makeRequest()
 
     const response = await login.handle(request)
-    expect(response.statusCode).toBe(500)
-    expect(response.body).toEqual(new ServerError())
+    expect(response).toEqual(internalServerError(Error()))
   })
 
   test('Should call LoginValidator with a correct email', async () => {
@@ -97,5 +95,12 @@ describe('Login Controller', () => {
     const request = makeRequest()
     await login.handle(request)
     expect(authSpy).toHaveBeenCalledWith('anything@email.com', 'password')
+  })
+
+  test('Should return 401 if invalid credentials are provided', async () => {
+    const { login, authenticationStub } = makeLogin()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const response = await login.handle(makeRequest())
+    expect(response).toEqual(unauthorized())
   })
 })
