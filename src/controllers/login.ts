@@ -1,6 +1,6 @@
 import { HttpResponse, HttpRequest } from '../protocols/http'
 import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest, internalServerError, unauthorized } from '../helpers/http-helper'
+import { badRequest, internalServerError, ok, unauthorized } from '../helpers/http-helper'
 import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { Authentication } from '../protocols/authentication'
@@ -31,6 +31,7 @@ export class LoginController {
       if (!accessToken) {
         return unauthorized()
       }
+      return ok({ accessToken })
     } catch (error) {
       return internalServerError(error)
     }

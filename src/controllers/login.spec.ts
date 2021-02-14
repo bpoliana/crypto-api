@@ -1,6 +1,6 @@
 import { LoginController } from './login'
 import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest, internalServerError, unauthorized } from '../helpers/http-helper'
+import { badRequest, internalServerError, unauthorized, ok } from '../helpers/http-helper'
 import { LoginValidator } from '../protocols/login-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { Authentication } from '../protocols/authentication'
@@ -102,5 +102,11 @@ describe('Login Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve(null)))
     const response = await login.handle(makeRequest())
     expect(response).toEqual(unauthorized())
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { login } = makeLogin()
+    const response = await login.handle(makeRequest())
+    expect(response).toEqual(ok({ accessToken: 'token aqui' }))
   })
 })
