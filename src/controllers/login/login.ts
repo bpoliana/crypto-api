@@ -1,9 +1,9 @@
-import { HttpResponse, HttpRequest } from '../protocols/http'
-import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest, internalServerError, ok, unauthorized } from '../helpers/http-helper'
-import { LoginValidator } from '../protocols/login-validator'
-import { InvalidParamError } from '../errors/invalid-param-error'
-import { Authentication } from '../protocols/authentication'
+import { HttpResponse, HttpRequest } from '../../protocols/http'
+import { MissingParamError } from '../../errors/missing-param-error'
+import { badRequest, internalServerError, ok, unauthorized } from '../../helpers/http-helper'
+import { LoginValidator } from '../../protocols/login-validator'
+import { InvalidParamError } from '../../errors/invalid-param-error'
+import { Authentication } from '../../protocols/authentication'
 
 export class LoginController {
   private readonly loginValidator: LoginValidator

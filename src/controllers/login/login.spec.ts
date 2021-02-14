@@ -1,10 +1,10 @@
 import { LoginController } from './login'
-import { MissingParamError } from '../errors/missing-param-error'
-import { badRequest, internalServerError, unauthorized, ok } from '../helpers/http-helper'
-import { LoginValidator } from '../protocols/login-validator'
-import { InvalidParamError } from '../errors/invalid-param-error'
-import { Authentication } from '../protocols/authentication'
-import { HttpRequest } from '../protocols/http'
+import { MissingParamError } from '../../errors/missing-param-error'
+import { badRequest, internalServerError, unauthorized, ok } from '../../helpers/http-helper'
+import { LoginValidator } from '../../protocols/login-validator'
+import { InvalidParamError } from '../../errors/invalid-param-error'
+import { Authentication } from '../../protocols/authentication'
+import { HttpRequest } from '../../protocols/http'
 interface factoryTypes {
   login: LoginController
   loginValidatorStub: LoginValidator
