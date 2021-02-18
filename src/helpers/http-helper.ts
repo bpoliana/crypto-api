@@ -1,29 +1,17 @@
-import { HttpResponse } from '../protocols/http'
-import { ServerError } from '../errors/server-error'
-import { UnauthorizedError } from '../errors/unauthorized-error'
+import { Response } from 'express'
 
-export const badRequest = (error: Error): HttpResponse => {
-  return {
-    statusCode: 400,
-    body: error
-  }
+export const badRequest = (res, error: Error): Response => {
+  return res.status(400).send({ message: error.message })
 }
 
-export const unauthorized = (): HttpResponse => ({
-  statusCode: 401,
-  body: new UnauthorizedError()
-})
-
-export const internalServerError = (error: Error): HttpResponse => {
-  return {
-    statusCode: 500,
-    body: new ServerError(error.stack)
-  }
+export const unauthorized = (res, error: Error): Response => {
+  return res.status(401).send({ message: error.message })
 }
 
-export const ok = (data: any): HttpResponse => {
-  return {
-    statusCode: 200,
-    body: data
-  }
+export const internalServerError = (res, error: Error): Response => {
+  return res.status(500).send({ message: error.message })
+}
+
+export const ok = (res, data: any): Response => {
+  return res.status(200).send({ accessToken: data })
 }
