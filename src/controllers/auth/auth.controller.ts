@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { jwtSecret } from '../../config'
+import { InvalidParamError } from '../../errors/invalid-param-error'
 import { MissingParamError } from '../../errors/missing-param-error'
-import { badRequest } from '../../helpers/http-helper'
+import { UnauthorizedError } from '../../errors/unauthorized-error'
+import { badRequest, ok, unauthorized } from '../../helpers/http-helper'
 import { LoginValidatorService } from '../../services/login-validator'
 
 class AuthController {
@@ -18,7 +20,8 @@ class AuthController {
     const loginValidator = new LoginValidatorService()
     const isValid = loginValidator.isValid(email, password)
     if (!isValid) {
-      return res.status(400).send('login not valid')
+      const error = new InvalidParamError()
+      return badRequest(res, error)
     }
 
     const accessToken = jwt.sign(
@@ -26,10 +29,11 @@ class AuthController {
       { expiresIn: '1h' }
     )
     if (!accessToken) {
-      return res.status(401).send('no valid token')
+      const error = new UnauthorizedError()
+      return unauthorized(res, error)
     }
     if (accessToken) {
-      return res.status(200).send({ accessToken: accessToken })
+      return ok(res, accessToken)
     }
     next()
   }
