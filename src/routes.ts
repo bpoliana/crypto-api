@@ -1,11 +1,8 @@
 import { Router } from 'express'
+import AuthController from './controllers/auth/auth.controller'
 
-const router = Router()
+const routes = Router()
 
-router.get('/', (req, res) => {
-  return res.status(200).send({
-    message: 'Bem vinda a crypto API'
-  })
-})
+routes.post('/login', AuthController.login)
 
-export { router }
+export { routes }

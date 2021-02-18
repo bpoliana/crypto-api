@@ -1,3 +1,21 @@
-import app from './app'
+import express from 'express'
+import cors from 'cors'
+import { routes } from './routes'
 
-app.listen(3030, () => console.log('Server running at http://localhost:3030'))
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+app.use('/api', routes)
+
+app.get('/', (req, res, next) => {
+  res.status(200).send({
+    message: 'Bem vinda a crypto API'
+  })
+  next()
+})
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000!')
+})
