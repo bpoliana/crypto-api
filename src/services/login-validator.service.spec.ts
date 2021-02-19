@@ -1,4 +1,4 @@
-import { LoginValidatorService } from './login-validator'
+import { LoginValidatorService } from './login-validator.service'
 import validator from 'validator'
 
 jest.mock('validator', () => ({
