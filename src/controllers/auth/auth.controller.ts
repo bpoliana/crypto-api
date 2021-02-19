@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from 'express'
-import * as jwt from 'jsonwebtoken'
+import { Request, Response } from 'express'
 import { jwtSecret } from '../../config'
 import { InvalidParamError } from '../../errors/invalid-param-error'
 import { MissingParamError } from '../../errors/missing-param-error'
 import { UnauthorizedError } from '../../errors/unauthorized-error'
 import { badRequest, ok, unauthorized } from '../../helpers/http-helper'
+import { AuthService } from '../../services/auth.service'
 import { LoginValidatorService } from '../../services/login-validator.service'
 
 class AuthController {
-  async login (req: Request, res: Response, next: NextFunction) {
+  async login (req: Request, res: Response) {
     const requiredFields = ['email', 'password']
     for (const field of requiredFields) {
       if (!req.body[field]) {
@@ -24,18 +24,13 @@ class AuthController {
       return badRequest(res, error)
     }
 
-    const accessToken = jwt.sign(
-      { email: email }, jwtSecret,
-      { expiresIn: '1h' }
-    )
+    const authService = new AuthService(jwtSecret)
+    const accessToken = await authService.authenticate(email)
     if (!accessToken) {
       const error = new UnauthorizedError()
       return unauthorized(res, error)
     }
-    if (accessToken) {
-      return ok(res, accessToken)
-    }
-    next()
+    return ok(res, accessToken)
   }
 }
 
