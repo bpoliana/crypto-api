@@ -1,7 +1,7 @@
-import { LoginValidator } from '../../protocols/login-validator'
+import { ILoginValidator } from '../../../protocols/login-validator'
 import validator from 'validator'
 import PasswordValidator from 'password-validator'
-export class LoginValidatorService implements LoginValidator {
+export class LoginValidator implements ILoginValidator {
   isValid (email: string, password: string): boolean {
     const validEmail = validator.isEmail(email)
 

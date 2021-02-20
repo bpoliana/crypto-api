@@ -1,4 +1,4 @@
-import { LoginValidatorService } from './login-validator.service'
+import { LoginValidator } from './login-validator'
 import validator from 'validator'
 
 jest.mock('validator', () => ({
@@ -7,8 +7,8 @@ jest.mock('validator', () => ({
   }
 }))
 
-const makeLoginValidator = (): LoginValidatorService => {
-  return new LoginValidatorService()
+const makeLoginValidator = (): LoginValidator => {
+  return new LoginValidator()
 }
 describe('LoginValidator Service', () => {
   test('Should return false if validator returns false', () => {

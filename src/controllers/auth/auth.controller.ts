@@ -5,7 +5,7 @@ import { MissingParamError } from '../../errors/missing-param-error'
 import { UnauthorizedError } from '../../errors/unauthorized-error'
 import { badRequest, ok, unauthorized } from '../../helpers/http-helper'
 import { AuthService } from '../../services/auth/auth.service'
-import { LoginValidatorService } from '../../services/login-validator/login-validator.service'
+import { LoginValidator } from '../validators/login-validator/login-validator'
 
 class AuthController {
   async login (req: Request, res: Response) {
@@ -17,7 +17,7 @@ class AuthController {
       }
     }
     const { email, password } = req.body
-    const loginValidator = new LoginValidatorService()
+    const loginValidator = new LoginValidator()
     const isValid = loginValidator.isValid(email, password)
     if (!isValid) {
       const error = new InvalidParamError()
