@@ -13,5 +13,5 @@ export const internalServerError = (res, error: Error): Response => {
 }
 
 export const ok = (res, data: any): Response => {
-  return res.status(200).send({ accessToken: data })
+  return res.status(200).send({ data })
 }

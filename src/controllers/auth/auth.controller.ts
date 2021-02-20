@@ -30,7 +30,7 @@ class AuthController {
       const error = new UnauthorizedError()
       return unauthorized(res, error)
     }
-    return ok(res, accessToken)
+    return ok(res, { accessToken: accessToken })
   }
 }
 
