@@ -4,8 +4,8 @@ import { InvalidParamError } from '../../errors/invalid-param-error'
 import { MissingParamError } from '../../errors/missing-param-error'
 import { UnauthorizedError } from '../../errors/unauthorized-error'
 import { badRequest, ok, unauthorized } from '../../helpers/http-helper'
-import { AuthService } from '../../services/auth.service'
-import { LoginValidatorService } from '../../services/login-validator.service'
+import { AuthService } from '../../services/auth/auth.service'
+import { LoginValidatorService } from '../../services/login-validator/login-validator.service'
 
 class AuthController {
   async login (req: Request, res: Response) {

@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken'
+import { Authentication } from '../../protocols/authentication'
 
-export class AuthService {
+export class AuthService implements Authentication {
   private readonly secret: string
 
   constructor (secret: string) {

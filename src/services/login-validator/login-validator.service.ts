@@ -1,4 +1,4 @@
-import { LoginValidator } from '../protocols/login-validator'
+import { LoginValidator } from '../../protocols/login-validator'
 import validator from 'validator'
 import PasswordValidator from 'password-validator'
 export class LoginValidatorService implements LoginValidator {
