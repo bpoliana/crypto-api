@@ -18,7 +18,13 @@ class CurrencyController {
     try {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
-        return res.status(400).send()
+        let errorMessage = ''
+        if (errors.array()[0].param === 'currency') {
+          errorMessage = 'Moeda invalida'
+        } else {
+          errorMessage = 'Valor invalido'
+        }
+        return res.status(400).send({ message: errorMessage })
       }
       const currencyService = new CurrencyService()
       const currencies: UpdateCurrencyDTO = req.body
