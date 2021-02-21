@@ -17,7 +17,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   }
 
   const { id } = jwtPayload
-  console.log(jwtPayload)
   const newToken = jwt.sign({ id }, jwtSecret, {
     expiresIn: '1h'
   })
