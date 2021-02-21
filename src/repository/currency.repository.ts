@@ -6,4 +6,8 @@ export class CurrencyRepository {
     const currencies = JSON.parse(data.toString())
     return currencies
   }
+
+  save = (currencies) => {
+    fs.writeFileSync('src/db/currencies.json', JSON.stringify(currencies, null, 2))
+  }
 }

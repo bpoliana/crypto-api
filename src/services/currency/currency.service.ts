@@ -1,3 +1,4 @@
+import { UpdateCurrencyDTO } from '../../dto/UpdateCurrencyDTO'
 import { CoinDeskRepository } from '../../repository/coin-desk.repository'
 import { CurrencyRepository } from '../../repository/currency.repository'
 import { buildBtcResponseDTO } from '../builders/btcResponseDTO.builder'
@@ -17,5 +18,12 @@ export class CurrencyService {
     const btcResponseDTO = buildBtcResponseDTO(btcResponse, currencies)
 
     return btcResponseDTO
+  }
+
+  async updateCurrencies (currency: UpdateCurrencyDTO) {
+    const currencyRepository = new CurrencyRepository()
+    const currencies = await currencyRepository.getCurrencies()
+    currencies[currency.currency] = currency.value.toString()
+    currencyRepository.save(currencies)
   }
 }
