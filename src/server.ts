@@ -7,7 +7,6 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(endpointNotFound)
 
 app.use('/api', routes)
 
@@ -17,6 +16,8 @@ app.get('/', (req, res, next) => {
   })
   next()
 })
+
+app.use(endpointNotFound)
 
 app.listen(3000, () => {
   console.log('Server started on port 3000!')
