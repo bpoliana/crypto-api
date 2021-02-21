@@ -21,16 +21,16 @@ class CurrencyController {
       if (!errors.isEmpty()) {
         let errorMessage = ''
         if (errors.array()[0].param === 'currency') {
-          errorMessage = 'Moeda invalida'
+          errorMessage = 'Moeda inválida'
         } else {
-          errorMessage = 'Valor invalido'
+          errorMessage = 'Valor inválido'
         }
         throw new InvalidParamError(errorMessage)
       }
       const currencyService = new CurrencyService()
       const currencies: UpdateCurrencyDTO = req.body
       await currencyService.updateCurrencies(currencies)
-      return ok(res, 'Valor alterado com sucesso!')
+      return ok(res, { message: 'Valor alterado com sucesso!' })
     } catch (err) {
       if (err instanceof InvalidParamError) {
         return badRequest(res, err)
