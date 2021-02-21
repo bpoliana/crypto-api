@@ -1,5 +1,1 @@
-export class InvalidParamError extends Error {
-  constructor () {
-    super('Campos inválidos')
-  }
-}
+export class InvalidParamError extends Error {}
