@@ -13,7 +13,7 @@ export const internalServerError = (res, error: Error): Response => {
 }
 
 export const ok = (res, data: any): Response => {
-  return res.status(200).send({ data })
+  return res.status(200).send(data)
 }
 
 export const notFound = (res, message): Response => {
