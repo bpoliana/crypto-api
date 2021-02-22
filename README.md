@@ -45,10 +45,9 @@ As decisões de tecnologias a serem utilizadas _TypeScript_ e _Express_ baseou-s
 
 - Aumentar a cobertura de testes com foco nos casos de uso dos serviços 
 - Testes unitários para os controllers
-- Teste de integração com API Coin Desk
 - Alterar tratamento de validações de requisição para ficar totalmente centralizado nas middlewares
 
 Possíveis melhorias: 
 - Alterar a aplicação para o padrão REST
 - Adicionar cache para chamada da API Coin Desk
-- Subir a aplicação num Docker 
+- Subir a aplicação em um Docker 
