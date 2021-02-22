@@ -11,15 +11,14 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   try {
     jwtPayload = jwt.verify(token.toString(), jwtSecret)
     res.locals.jwtPayload = jwtPayload
+    const { id } = jwtPayload
+    const newToken = jwt.sign({ id }, jwtSecret, {
+      expiresIn: '1h'
+    })
+    res.setHeader('token', newToken)
   } catch (err) {
     const error = new UnauthorizedError('Token inválido')
     return unauthorized(res, error)
   }
-
-  const { id } = jwtPayload
-  const newToken = jwt.sign({ id }, jwtSecret, {
-    expiresIn: '1h'
-  })
-  res.setHeader('token', newToken)
   next()
 }
