@@ -1,5 +1,7 @@
 import { notFound } from '../helpers/http-helper'
 
 export const endpointNotFound = (req, res, next) => {
-  return notFound(res, 'Endpoint não encontrado')
+  if (!req.route) {
+    return next(notFound(res, 'Endpoint não encontrado'))
+  }
 }
