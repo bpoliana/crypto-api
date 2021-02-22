@@ -32,18 +32,6 @@ const makeCurrencies = (): CurrenciesDTO => ({
   EUR: '0.920',
   CAD: '1.440'
 })
-
-// const mockedService = jest.mock('../client/coin-desk/coin-desk.client', () => ({
-//   async getBtc (): Promise<CoinDeskResponseDTO> {
-//     return await new Promise(resolve => resolve(makeCoinDeskesponse()))
-//   }
-// }))
-
-// jest.mock('../client/coin-desk/coin-desk.client')
-
-// beforeEach(() => {
-//   CoinDeskClient.mockClear()
-// })
 interface factoryTypes {
   coinDeskClientStub: CoinDeskClient
   currencyService: CurrencyService
