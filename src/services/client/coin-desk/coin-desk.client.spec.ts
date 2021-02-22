@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import { CoinDeskClient } from './coin-desk.client'
 
 describe('CoinDesk Client', () => {
-  test('Should return 200 when calls Coin Desk API successfully', async () => {
+  test('Should return a response to Coin Desk API called successfully', async () => {
     const coinDeskResponse = new CoinDeskClient()
     const response = await coinDeskResponse.getBtc()
     expect(response).toBeDefined()
