@@ -122,4 +122,14 @@ describe('Currency Service', () => {
       expect(err).toStrictEqual(new TypeError('Invalid btc return'))
     }
   })
+  test('Should return TypeError if Currency Repository returns invalid response', async () => {
+    try {
+      const { coinDeskClientStub, currencyService, currencyRepositoryStub } = makeCurrencyService()
+      jest.spyOn(coinDeskClientStub, 'getBtc').mockReturnValueOnce(new Promise(resolve => resolve(makeCoinDeskesponse())))
+      jest.spyOn(currencyRepositoryStub, 'getCurrencies').mockReturnValueOnce(undefined)
+      await currencyService.getCurrencies()
+    } catch (err) {
+      expect(err).toStrictEqual(new TypeError('Invalid CurrencyRepository return'))
+    }
+  })
 })

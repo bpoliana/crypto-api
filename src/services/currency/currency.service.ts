@@ -17,7 +17,11 @@ export class CurrencyService {
     if (!btcResponse) {
       throw new TypeError('Invalid btc return')
     }
+
     const currencies = this.currencyRepository.getCurrencies()
+    if (!currencies) {
+      throw new TypeError('Invalid CurrencyRepository return')
+    }
 
     const btcResponseDTO = buildBtcResponseDTO(btcResponse, currencies)
 
