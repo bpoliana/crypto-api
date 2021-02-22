@@ -18,6 +18,8 @@ Para subir a aplicação localmente:
 ```
 npm start
 ```
+A aplicação está rodando por padrão na porta `3000`. Mas isso pode reconfigurado para qualquer porta, alterando a função `app.listen` dentro do arquivo `serve.ts`. 
+Para testar a aplicação manualmente, basta entrar no Insomnia / Postman e testar as requisições conforma as especificações da descrição do desafio.
 
 ## Testando 
 Para rodar os Testes Unitários use o comando: 
