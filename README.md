@@ -1,6 +1,6 @@
 # crypto-api
 
-API para visualização do preço do BitCoin para diferentes moedas: `USD`, `BRL`, `EUR` e `CAD` (Dólar Americano, Real, Euro e Dólar Canadense).
+API para visualização do preço do BitCoin para diferentes moedas: `USD`, `BRL`, `EUR` e `CAD` (Dólar Americano, Real, Euro e Dólar Canadense). O frontend da api se encontra em outro repositório: [crypto-front](https://github.com/bpoliana/crypto-front)
 ## Tech-stack
 
 Foi escolhida a linguagem _TypeScript_, por causa da atual familiaridade da autora com tecnologia e o framework _Express_ em função da sua flexibilidade. Para a requisição feita à API Coin Desk, foi utilizado o `axios`. Para os testes, foi escolhido o `jest`. 
