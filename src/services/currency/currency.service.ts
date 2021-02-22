@@ -4,12 +4,20 @@ import { buildBtcResponseDTO } from '../builders/btcResponseDTO.builder'
 import { CoinDeskClient } from '../client/coin-desk/coin-desk.client'
 
 export class CurrencyService {
-  async getCurrencies () {
-    const coinDeskService = new CoinDeskClient()
-    const btcResponse = await coinDeskService.getBtc()
+  private readonly coinDeskClient: CoinDeskClient
+  private readonly currencyRepository: CurrencyRepository
 
-    const currencyRepository = new CurrencyRepository()
-    const currencies = currencyRepository.getCurrencies()
+  constructor (coinDeskClient?: CoinDeskClient, currencyRepository?: CurrencyRepository) {
+    this.coinDeskClient = coinDeskClient || new CoinDeskClient()
+    this.currencyRepository = currencyRepository || new CurrencyRepository()
+  }
+
+  async getCurrencies () {
+    const btcResponse = await this.coinDeskClient.getBtc()
+    if (!btcResponse) {
+      throw new TypeError('Invalid btc return')
+    }
+    const currencies = this.currencyRepository.getCurrencies()
 
     const btcResponseDTO = buildBtcResponseDTO(btcResponse, currencies)
 
@@ -17,9 +25,8 @@ export class CurrencyService {
   }
 
   async updateCurrencies (currency: UpdateCurrencyDTO) {
-    const currencyRepository = new CurrencyRepository()
-    const currencies = await currencyRepository.getCurrencies()
+    const currencies = await this.currencyRepository.getCurrencies()
     currencies[currency.currency] = currency.value.toString()
-    currencyRepository.save(currencies)
+    this.currencyRepository.save(currencies)
   }
 }
