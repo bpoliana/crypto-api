@@ -1,5 +1,5 @@
 export interface Time {
   updated: string
   updatedISO: string
-  updateuk: string
+  updateduk: string
 }
