@@ -33,7 +33,7 @@ Na tentativa de manter padrões sensatos durante a implementação, utlizei o `e
 ## A Arquitetura
 A Arquitetura desse projeto pode ser entendida como uma abstração do desenho a seguir:
 
-![architecture](https://github.com/bpoliana/crypto-api/blob/main/architecture.png?raw=true)
+![architecture1](architecture1.png)
 
 
 ### Decisões de projeto
